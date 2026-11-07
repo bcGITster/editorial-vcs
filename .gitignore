@@ -1,0 +1,23 @@
+# Configuration (contains secrets)
+config.php
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+db_data/
+
+# Original source (development reference only)
+vault-original/
+
+# Development
+kickoff-prompt.md

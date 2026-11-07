@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME:-editorial_vcs}
+      - DB_USER=${DB_USER:-editorial_user}
+      - DB_PASS=${DB_PASS:-changeme}
+      - APP_TITLE=${APP_TITLE:-Editorial VCS}
+      - APP_TIMEZONE=${APP_TIMEZONE:-UTC}
+      - FEATURE_LORE_BIBLE=${FEATURE_LORE_BIBLE:-true}
+      - FEATURE_GRAPH=${FEATURE_GRAPH:-true}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      # Optional: mount for development
+      # - ./src:/var/www/html
+      # Optional: mount for persistent deploy targets
+      # - /var/www/sites:/var/www/sites:ro
+      []
+
+  db:
+    image: mariadb:10.11
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS:-rootchangeme}
+      - MYSQL_DATABASE=${DB_NAME:-editorial_vcs}
+      - MYSQL_USER=${DB_USER:-editorial_user}
+      - MYSQL_PASSWORD=${DB_PASS:-changeme}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  db_data:
