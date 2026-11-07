@@ -17,7 +17,7 @@ A self-hosted editorial version control system for creative projects. Track revi
 
 ```bash
 # Clone and configure
-git clone https://github.com/yourusername/editorial-vcs.git
+git clone https://github.com/bcGITster/editorial-vcs.git
 cd editorial-vcs
 cp .env.example .env
 # Edit .env with your settings
